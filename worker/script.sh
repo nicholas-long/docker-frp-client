@@ -10,4 +10,5 @@ then
     host=$(echo $args | cut -d ' ' -f 1)
     port=$(echo $args | cut -d ' ' -f 2)
     mysql -h mysql -u mysql -pmysql -D frpsscan -e "insert into targets (ip, port, valid) values ('$host', $port, 1);"
+    python3 /opt/worker/push.py
 fi

@@ -18,16 +18,19 @@ services:
             - mysql
         build: ./frpc
         volumes: 
-            - ./script.sh:/opt/script.sh
-        entrypoint: sh -c 'sleep 5 && amqp-consume -u amqp://rabbit -q "test" -e "amq.topic" -r "worker1" /opt/script.sh'
-    add_host:
+            - ./worker:/opt/worker
+        entrypoint: sh -c 'sleep 5 && amqp-consume -u amqp://rabbit -q "test" -e "amq.topic" -r "worker1" /opt/worker/script.sh'
+        secrets:
+            - pusher_secret
+    api:
         depends_on: 
             - rabbit
-        build: ./amqp-script
-        entrypoint: amqp-publish -u amqp://rabbit -e "amq.topic" -r "worker1" -b
-    web:
-        depends_on: 
             - mysql
-        build: ./www
-        ports:
-            - "8080:80"
+        build: ./api
+        volumes: 
+            - ./api:/usr/src/app
+        ports: 
+            - "5000:5000"
+secrets:
+    pusher_secret:
+        file: pusher.secret
