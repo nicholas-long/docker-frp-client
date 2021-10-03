@@ -3,6 +3,7 @@
 read args
 echo processing $args
 timeout 10 /opt/run-frpc.sh $args 8999 80 > output
+cat output
 grep 'start proxy success' output
 if [ $? -eq 0 ]
 then
