@@ -1,0 +1,17 @@
+<table class="table">
+    <thead>
+        <tr>
+            <th>ip</th>
+            <th>port</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for item in model %}
+        <tr>
+            <td>{{item.ip}}</td>
+            <td>{{item.port}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

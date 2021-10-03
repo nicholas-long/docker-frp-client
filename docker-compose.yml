@@ -1,0 +1,36 @@
+version: "3.8"
+services:
+    mysql:
+        environment:
+            - MYSQL_ROOT_PASSWORD=frpsscan
+            - MYSQL_DATABASE=frpsscan
+            - MYSQL_USER=mysql
+            - MYSQL_PASSWORD=mysql
+        image: mysql
+        command: --default-authentication-plugin=mysql_native_password
+        volumes:
+            - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    rabbit:
+        image: rabbitmq
+    sub:
+        depends_on: 
+            - rabbit
+            - mysql
+        build: ./frpc
+        volumes: 
+            - ./worker:/opt/worker
+        entrypoint: sh -c 'sleep 5 && amqp-consume -u amqp://rabbit -q "test" -e "amq.topic" -r "worker1" /opt/worker/script.sh'
+        secrets:
+            - pusher_secret
+    api:
+        depends_on: 
+            - rabbit
+            - mysql
+        build: ./api
+        volumes: 
+            - ./api:/usr/src/app
+        ports: 
+            - "5000:5000"
+secrets:
+    pusher_secret:
+        file: pusher.secret

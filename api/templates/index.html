@@ -1,0 +1,50 @@
+<html>
+    <head>
+        <title>FRP checker</title>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+
+        <script>
+
+            function update(){
+                $.get('/view').done(function(data){
+                    $('.content').html(data);
+                })
+            }
+            $(document).ready(function(){
+                $('#add-btn').click(function(){
+                        var ip = $('#ip').val();
+                        var port = $('#port').val();
+                        $.post('/add', data={ip: ip, port: port}).done(function(){
+                            $('#ip').val('');
+                            $('#port').val('');
+                        });
+                    });
+
+                update();
+            });
+
+                    // Enable pusher logging - don't include this in production
+                    Pusher.logToConsole = true;
+
+                    var pusher = new Pusher('948e8ac8cb97e719702d', {
+                        cluster: 'us3'
+                    });
+
+                    var channel = pusher.subscribe('my-channel');
+                    channel.bind('my-event', function (data) {
+                        update();
+                    });
+        </script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    </head>
+<body>
+    <div class="content"></div>
+
+    <form action="#">
+        <input type="text" id="ip" name="ip" placeholder="ip" />
+        <input type="number" id="port" name="port" placeholder="port" />
+        <button type="button" id="add-btn" class="btn btn-primary">Send</button>
+    </form>
+</body>
+</html>
