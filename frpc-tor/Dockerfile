@@ -21,6 +21,9 @@ RUN cd /opt/frp && make frpc
 
 COPY ./run-frpc.sh /opt/run-frpc.sh
 COPY ./gen-ini.sh /opt/gen-ini.sh
+COPY ./reset-tor.py /opt/reset-tor.py
+
+RUN pip3 install stem
 
 ENTRYPOINT ["/opt/run-frpc.sh"]
 # ENTRYPOINT [ "bash" ]
