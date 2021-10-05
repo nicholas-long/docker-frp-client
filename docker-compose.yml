@@ -16,10 +16,11 @@ services:
         depends_on: 
             - rabbit
             - mysql
-        build: ./frpc
+        build: ./frpc-tor
         volumes: 
             - ./worker:/opt/worker
-        entrypoint: sh -c 'sleep 5 && amqp-consume -u amqp://rabbit -q "test" -e "amq.topic" -r "worker1" /opt/worker/script.sh'
+        entrypoint: /opt/worker/entry.sh
+        restart: always
         secrets:
             - pusher_secret
     api:

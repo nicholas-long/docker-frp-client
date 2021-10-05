@@ -1,3 +1,6 @@
 api/__pycache__
 pusher.secret
 output.txt
+output*
+*.log
+ip*
