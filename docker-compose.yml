@@ -16,7 +16,7 @@ services:
         depends_on: 
             - rabbit
             - mysql
-        build: ./frpc-tor
+        build: ./frpc
         volumes: 
             - ./worker:/opt/worker
         entrypoint: /opt/worker/entry.sh
